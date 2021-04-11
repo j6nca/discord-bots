@@ -1,16 +1,39 @@
-# This is a sample Python script.
+import os
+import discord
+from discord.ext import commands
+from dotenv import load_dotenv
+from aqw.charInfo import retrieveChar
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+load_dotenv()
+TOKEN = os.getenv('DISCORD_TOKEN')
 
+# client = discord.Client()
+client = commands.Bot(command_prefix=".")
+@client.event
+async def on_ready():
+    print(f'{client.user} has connected to Discord!')
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+@client.command()
+async def info(ctx, *args):
+    username = ' '.join(args)
+    charData = retrieveChar(username)
+    print(charData)
+    embed = discord.Embed(
+        title=username,
+        color=discord.Color.gold())
+    embed.add_field(name="Id", value=charData["ccid"] if charData["ccid"] != '' else "None", inline=False)
+    # embed.add_field(name='\u200b', value='\u200b', inline=True)
 
+    embed.add_field(name="Guild", value=charData["guild"] if charData["guild"] != '' else "None", inline=True)
+    embed.add_field(name="Faction", value=charData["faction"] if charData["faction"] != '' else "None", inline=True)
+    embed.add_field(name="Level", value=charData["level"] if charData["level"] != '' else "None", inline=True)
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+    embed.add_field(name="Class", value=charData["class"] if charData["class"] != '' else "None", inline=True)
+    embed.add_field(name="Armor", value=charData["armor"] if charData["armor"] != '' else "None", inline=True)
+    embed.add_field(name="Helm", value=charData["helm"] if charData["helm"] != '' else "None", inline=True)
+    embed.add_field(name="Weapon", value=charData["weapon"] if charData["weapon"] != '' else "None", inline=True)
+    embed.add_field(name="Cape", value=charData["cape"] if charData["cape"] !='' else "None", inline=True)
+    embed.add_field(name="Pet", value=charData["pet"] if charData["pet"] != '' else "None", inline=True)
+    await ctx.send(embed=embed)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+client.run(TOKEN)
