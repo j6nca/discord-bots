@@ -8,6 +8,7 @@ def retrieveChar(username: str):
     charUrl = "https://account.aq.com/CharPage?id="+username
     response = requests.get(charUrl)
     ccidReg = re.compile(r'var ccid = ((?:(?!;).)*)')
+    usernameReg = re.compile(r'h1>((?:(?!<).)*)')
 
     lvlReg = re.compile(r'Level:</label> ((?:(?!<).)*)')
     classReg = re.compile(r'Class:</label> ((?:(?!<).)*)')
@@ -20,7 +21,7 @@ def retrieveChar(username: str):
     factionReg = re.compile(r'Faction:</label> ((?:(?!<).)*)')
 
     charData = {
-        "username": username,
+        "username": usernameReg.findall(response.text)[0],
         "ccid": ccidReg.findall(response.text)[0],
         "guild": guildReg.findall(response.text)[0],
         "level": lvlReg.findall(response.text)[0],
@@ -32,4 +33,9 @@ def retrieveChar(username: str):
         "pet": petReg.findall(response.text)[0],
         "faction": factionReg.findall(response.text)[0]
     }
+    #No empty string equips
+    for key in charData:
+        if charData[key]=="":
+            charData[key] == "None"
+
     return charData
