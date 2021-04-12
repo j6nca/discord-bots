@@ -36,6 +36,6 @@ def retrieveChar(username: str):
     #No empty string equips
     for key in charData:
         if charData[key]=="":
-            charData[key] == "None"
+            charData[key] = "None"
 
     return charData

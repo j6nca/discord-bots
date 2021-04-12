@@ -31,8 +31,9 @@ async def info(ctx, *args):
     **Pet**             %s
     """ % (charData["ccid"],charData["guild"],charData["faction"],charData["level"],charData["class"],charData["armor"],charData["helm"],charData["weapon"],charData["cape"],charData["pet"])
     embed = discord.Embed(
+        title=charData["username"]+"'s Info",
         color=discord.Color.gold())
-    embed.add_field(name=charData["username"]+"'s Info", value=info)
+    embed.add_field(name="\u200b", value=info)
     # embed.add_field(name="Id", value=charData["ccid"] if charData["ccid"] != '' else "None", inline=False)
     # # embed.add_field(name='\u200b', value='\u200b', inline=True)
     #
